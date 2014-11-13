@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace WindowsFormsApplication1
+{
+    public partial class Form1 : Form
+    {
+        Database1Entities1 context;
+        DAO current;
+        public Form1()
+        {
+            InitializeComponent();
+
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            context = new Database1Entities1();
+            current = new DAO();
+            LoadToGrid();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void InsertButton_Click(object sender, EventArgs e)
+        {
+            Database1Entities context = new Database1Entities();
+            try
+            {
+                //DAO current = new DAO();
+                current.Insert(textId.Text, textName.Text, textSurname.Text, textFaculty.Text);
+                MessageBox.Show("Insert successfully.");
+                LoadToGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.ToString());
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void LoadToGrid()
+        {
+            //List<Students> list = new List<Students>();
+            //current.Load();
+            dataGridView1.DataSource = current.LoadStudents();
+        }
+
+        
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                
+                current.Delete(textId.Text);
+                MessageBox.Show("Delete successfully.");
+                LoadToGrid();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.InnerException.ToString());
+            }
+        }
+
+        private void UpdateButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DAO current = new DAO();
+                current.Update(textId.Text, textName.Text, textSurname.Text, textFaculty.Text);
+                MessageBox.Show("Record Updated successfully.");
+                LoadToGrid();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.InnerException.ToString());
+            }
+        
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            textId.Clear();
+            textName.Clear();
+            textSurname.Clear();
+            textFaculty.Clear();
+        }
+    }
+}
