@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace WindowsFormsApplication1
+{
+    class DAO : Form1
+    {
+        
+        public void Insert(string id, string name, string surname, string faculty) 
+        {
+            Database1Entities1 context = new Database1Entities1();
+            
+                Students student = new Students
+                {
+                    ID = int.Parse(id),
+                    Name = name,
+                    Surname = surname,
+                    Faculty = faculty
+                };
+                
+                context.Students.AddObject(student);
+                context.SaveChanges();
+        }
+        public void Delete(string id)
+        {
+            int studentID;
+            int.TryParse(id, out studentID);
+            Database1Entities1 context = new Database1Entities1();
+            
+            Students student = context.Students.First(i => i.ID == studentID);
+            {
+                context.Students.DeleteObject(student);
+                context.SaveChanges();   
+            };
+        }
+        public void Update(string id, string name, string surname, string faculty)
+        {
+            int studentID;
+            int.TryParse(id, out studentID);
+            Database1Entities1 testcontext = new Database1Entities1();
+            Students student = testcontext.Students.First(i => i.ID == studentID);
+            {
+                student.Name = name;
+                student.Surname = surname;
+                student.Faculty = faculty;
+                testcontext.SaveChanges();
+            };
+        }
+        public List<Students> LoadStudents()
+        {
+            List<Students> list = new List<Students>();
+            Database1Entities1 testcontext = new Database1Entities1();
+            var load = from g in testcontext.Students select g;
+            if (load != null)
+            {
+                 list = load.ToList();
+            }
+            return list;
+        }
+    }
+}
